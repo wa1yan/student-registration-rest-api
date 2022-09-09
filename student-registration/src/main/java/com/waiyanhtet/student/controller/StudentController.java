@@ -5,6 +5,9 @@ import static com.waiyanhtet.student.constant.PaginationConstant.DEFAULT_PAGE_SI
 import static com.waiyanhtet.student.constant.PaginationConstant.DEFAULT_SORT_BY;
 import static com.waiyanhtet.student.constant.PaginationConstant.DEFAULT_SORT_DIRECTION;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.waiyanhtet.event.StudentRegistrationCompleteEvent;
 import com.waiyanhtet.exception.RecordNotFoundException;
 import com.waiyanhtet.student.annotation.StudentControllerAnno;
 import com.waiyanhtet.student.model.Student;
@@ -25,6 +29,9 @@ import io.swagger.annotations.ApiOperation;
 
 @StudentControllerAnno
 public class StudentController {
+	
+	@Autowired
+	private ApplicationEventPublisher publisher;
 
 	@Autowired
 	private StudentService service;
@@ -48,8 +55,15 @@ public class StudentController {
 
 	@PostMapping()
 	@ApiOperation("Register a new student")
-	public String createStudent(@RequestBody Student student) {
-		service.createStudent(student);
+	public String createStudent(@RequestBody Student student,
+			HttpServletRequest request) {
+		Student registeredStudent = service.createStudent(student);
+
+		publisher.publishEvent(
+				new StudentRegistrationCompleteEvent(
+						registeredStudent,
+						request.getLocale(),
+						request.getContextPath()));
 		return "Student registration successfully";
 	}
 

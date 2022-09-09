@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.waiyanhtet.exception.StudentAlreadyExistException;
 import com.waiyanhtet.student.model.Student;
 import com.waiyanhtet.student.model.StudentResponse;
 import com.waiyanhtet.student.repository.StudentRepository;
@@ -47,6 +48,10 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student createStudent(Student student) {
+		Student registeredStudent = repo.findStudentByEmail(student.getEmail());
+		if(registeredStudent != null) {
+			throw new StudentAlreadyExistException("Email already exist in database.");
+		}
 		return repo.save(student);
 	}
 

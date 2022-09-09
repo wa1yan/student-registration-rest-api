@@ -32,13 +32,13 @@ public class Student {
 	@Column(name = "first_name")
 	private String firstName;
 	
-	@NotBlank(message = "First name must not be empty")
+	@NotBlank(message = "Last name must not be empty")
 	@Column(name = "last_name")
 	private String lastName;
 	
 	@NotBlank(message = "Email address must not be empty")
 	@Email(message = "Please enter email address")
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	private String email;
 	
 	@NotBlank(message = "Phone number must not be empty")

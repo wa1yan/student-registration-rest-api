@@ -7,5 +7,7 @@ import com.waiyanhtet.student.model.Student;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-
+	
+	//@Query("select * from student where email = ?1 ")
+	Student findStudentByEmail(String email);
 }
