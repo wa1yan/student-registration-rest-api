@@ -70,7 +70,7 @@ public class StudentController {
 	@PutMapping("/{id}")
 	@ApiOperation("Update a particular student by using id")
 	public String updateStudent(@PathVariable int id, @RequestBody Student updateStudent) {
-		var student = service.findById(id)
+		Student student = service.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Student " + id + " doesn't exist in database"));
 		if (student != null) {
 			student.setFirstName(updateStudent.getFirstName());

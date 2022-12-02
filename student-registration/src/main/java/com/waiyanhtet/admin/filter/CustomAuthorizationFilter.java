@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,7 +53,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 						authorities.add(new SimpleGrantedAuthority(role));
 					});
 
-					var authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
+					Authentication authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
 					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 					
 					filterChain.doFilter(request, response);
